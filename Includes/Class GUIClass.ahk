@@ -122,13 +122,7 @@
 		ControlGet,HWND,HWND,,%Focus%,% this.ID
 		return this.Con[HWND].Name
 	}GetName(HWND){
-		m("Function: " A_ThisFunc,"Label: " A_ThisLabel,"Line: " A_LineNumber,"","here?")
 		return this.Con[HWND].Name
-		/*
-			for a,b in this.Lookup
-				if(b.HWND=HWND)
-					return a
-		*/
 	}GetPos(){
 		Detect:=A_DetectHiddenWindows
 		DetectHiddenWindows,On
@@ -172,10 +166,7 @@
 						LV_DeleteCol(1)
 					for a,b in Info.Headers
 						LV_InsertCol(A_Index,"",b)
-				}
-			}
-		}
-		if(Info.Clear)
+		}}}if(Info.Clear)
 			LV_Delete(),this.StoredLV[Info.Control]:=[]
 		if(!this.StoredLV[Info.Control])
 			this.StoredLV[Info.Control]:=[]

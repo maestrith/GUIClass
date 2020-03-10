@@ -157,12 +157,6 @@ DropFiles(Files,Control){
 	m(Control,Files)
 }
 F1::
-
-
-Foo:=MainWin.All.MyListView1.HWND
-m(MainWin.GetName(Foo))
-
-
 Count++
 for a,MainWin in GUIClass.Table{
 	MainWin.SetText("MyEdit1",A_TickCount)
