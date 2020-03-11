@@ -1,5 +1,6 @@
 # GUIClass
 Basic Usage:
+Download the Zip file from Github.
 ```autohotkey
 #Include Includes\GUIClass.ahk
 MainWin:=New GUIClass(1,{MarginX:2,MarginY:2,Background:0,Color:"0xAAAAAA"}) ;Instantiate the class
