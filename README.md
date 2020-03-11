@@ -1,6 +1,6 @@
 # GUIClass
 Basic Usage:
-```
+```autohotkey
 #Include Includes\GUIClass.ahk
 MainWin:=New GUIClass(1,{MarginX:2,MarginY:2,Background:0,Color:"0xAAAAAA"}) ;Instantiate the class
 MainWin.Add("Edit,vMyEdit gMyEdit w500 h500,Default Text,wh") ;Add a Control to the GUI with the Name of MyEdit
