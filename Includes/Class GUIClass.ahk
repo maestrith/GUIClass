@@ -12,11 +12,12 @@
 		SetWinDelay,-1
 		Gui,%Win%:Destroy
 		Gui,%Win%:+HWNDHWND -DPIScale
-		Gui,%Win%:Margin,%MarginX%,%MarginY%
+		this.MarginX:=Info.MarginX,this.MarginY:=Info.MarginY
+		Gui,%Win%:Margin,% this.MarginX,% this.MarginY
 		Gui,%Win%:Font,% "s" Info.Size " c" Info.Color,Courier New
 		if(Info.Background!="")
 			Gui,%Win%:Color,% Info.Background,% Info.Background
-		this.MarginX:=Info.MarginX,this.MarginY:=Info.MarginY,this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color
+		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color
 		for a,b in {Border:A_OSVersion~="^10"?3:0,Caption:DllCall("GetSystemMetrics",Int,4,Int)}
 			this[a]:=b
 		Gui,%Win%:+LabelGUIClass.
