@@ -141,7 +141,7 @@
 	}LoadPos(){
 		IniRead,Pos,Settings.ini,% this.Win,Text,0
 		IniRead,Max,Settings.ini,% this.Win,Max,0
-		return {Pos:(Pos?Pos:0),Max:Max}
+		return {Pos:(Pos?Pos:""),Max:Max}
 	}SavePos(){
 		Pos:=this.WinPos()
 		if(Pos.Max=0){
