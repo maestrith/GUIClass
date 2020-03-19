@@ -17,7 +17,7 @@
 		Gui,%Win%:Font,% "s" Info.Size " c" Info.Color,Courier New
 		if(Info.Background!="")
 			Gui,%Win%:Color,% Info.Background,% Info.Background
-		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color
+		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color,this.SC:=[]
 		for a,b in {Border:A_OSVersion~="^10"?3:0,Caption:DllCall("GetSystemMetrics",Int,4,Int)}
 			this[a]:=b
 		Gui,%Win%:+LabelGUIClass.
@@ -49,16 +49,16 @@
 						Var[a]:=%a%
 				}return Var,Found:=""
 		}for a,b in Info{
-			i:=StrSplit(b,",")
+			i:=StrSplit(b,","),RegExMatch(i.2,"OU)\bv(.*)\b",Var)
 			if(i.1="ComboBox")
 				WinGet,ControlList,ControlList,% this.ID
 			if(i.1="s")
-				Pos:=RegExReplace(i.2,"OU)\s*\b(v.+)\b"),sc:=New s(1,{Pos:Pos}),HWND:=sc.sc
+				Pos:=RegExReplace(i.2,"OU)\s*\b(v.+)\b"),sc:=New S(1,{Pos:Pos}),HWND:=sc.sc,this.SC[Var.1]:=sc
 			else
 				Gui,% this.Win ":Add",% i.1,% i.2 " HWNDHWND",% i.3
 			if(RegExMatch(i.2,"OU)\bg(.*)\b",Label))
 				Label:=Label.1
-			if(RegExMatch(i.2,"OU)\bv(.*)\b",Var))
+			if(Var.1)
 				this.Var[Var.1]:={HWND:HWND,Type:i.1,sc:sc}
 			this.Con[HWND]:=[],Name:=Var.1?Var.1:Label,this.Con[HWND,"Name"]:=Name,Name:=Var.1?Var.1:Label?Label:"Control" A_TickCount A_MSec
 			if(i.4!="")
@@ -139,6 +139,10 @@
 	}GetTV(Control){
 		this.Default(Control)
 		return TV_GetSelection()
+	}Hotkeys(Keys){
+		Hotkey,IfWinActive,% this.ID
+		for a,b in Keys
+			Hotkey,%a%,%b%,On
 	}LoadPos(){
 		IniRead,Pos,Settings.ini,% this.Win,Text,0
 		IniRead,Max,Settings.ini,% this.Win,Max,0

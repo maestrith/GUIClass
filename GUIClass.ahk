@@ -5,6 +5,12 @@ MainWin:=New GUIClass(2,{MarginX:2,MarginY:2})
 MakeWin(MainWin)
 MainWin:=New GUIClass(1,{MarginX:2,MarginY:2,Background:0,Color:"0xAAAAAA"})
 MakeWin(MainWin)
+
+
+
+
+
+
 /*
 	The Add Method works the same way as any Gui command without Gui,Add,
 	Normally the first Text control would look like{
