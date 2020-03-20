@@ -53,7 +53,7 @@
 			if(i.1="ComboBox")
 				WinGet,ControlList,ControlList,% this.ID
 			if(i.1="s")
-				Pos:=RegExReplace(i.2,"OU)\s*\b(v.+)\b"),sc:=New S(1,{Pos:Pos}),HWND:=sc.sc,this.SC[Var.1]:=sc
+				Pos:=RegExReplace(i.2,"OU)\s*\b(v.+)\b"),sc:=New S(this.Win,{Pos:Pos}),HWND:=sc.sc,this.SC[Var.1]:=sc
 			else
 				Gui,% this.Win ":Add",% i.1,% i.2 " HWNDHWND",% i.3
 			if(RegExMatch(i.2,"OU)\bg(.*)\b",Label))
@@ -158,9 +158,12 @@
 			IniWrite,1,Settings.ini,% this.Win,Max
 	}SetText(Control,Text:=""){
 		this.Default(Control)
-		if((sc:=this.Var[Control].sc).sc)
-			Len:=VarSetCapacity(tt,StrPut(Text,"UTF-8")-1),StrPut(Text,&tt,Len,"UTF-8"),sc.2181(0,&tt)
-		else
+		if((sc:=this.Var[Control].sc).sc){
+			sc.2181(0,Text)
+			/*
+				Len:=VarSetCapacity(tt,StrPut(Text,"UTF-8")-1),StrPut(Text,&tt,Len,"UTF-8"),sc.2181(0,&tt)
+			*/
+		}else
 			GuiControl,% this.Win ":",% this.Lookup[Control].HWND,%Text%
 	}SetLV(Info){
 		this.Default(Info.Control)
