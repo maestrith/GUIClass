@@ -118,8 +118,8 @@
 		ControlFocus,,% this.LookUp[Control].ID
 	}Full(Control,Enable:=1){
 		this.All[Control].Full:=Enable
-	}Get(Val){
-		return this.Add({Get:Val})
+	}Get(Control){
+		return this.Add({Get:Control})
 	}GetFocus(){
 		ControlGetFocus,Focus,% this.ID
 		ControlGet,HWND,HWND,,%Focus%,% this.ID
