@@ -152,7 +152,7 @@
 	}SavePos(){
 		Pos:=this.WinPos()
 		if(Pos.Max=0){
-			IniWrite,% Pos.Text,Settings.ini,% this.Win,Text
+			IniWrite,% Pos.Text,%A_ScriptDir%\Settings.ini,% this.Win,Text
 			IniDelete,Settings.ini,% this.Win,Max
 		}else if(Pos.Max=1)
 			IniWrite,1,Settings.ini,% this.Win,Max
