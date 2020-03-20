@@ -1,3 +1,4 @@
 0.000.2
 Added:
 -Hotkeys Method: Send a Key:Value pair for the Hotkey:Function
+-DisableAll and Distroy: Added to Close()

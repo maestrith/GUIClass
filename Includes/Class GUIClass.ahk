@@ -82,6 +82,8 @@
 			Name:=""
 	}}Close(a:=""){
 		this:=GUIClass.Table[A_Gui],(Func:=Func("SavePos"))?Func.Call(this.Win,this.WinPos()):this.SavePos(),(Func:=Func(A_Gui "Close"))?Func.Call():""
+		Gui,% this.Win ":Destroy"
+		this.DisableAll()
 	}ContextMenu(x*){
 		this:=GUIClass.Table[A_Gui],x.1:=this.GetName(x.1),(Function:=Func(A_Gui "ContextMenu"))?Function.Call(x*)
 	}Default(Control){
