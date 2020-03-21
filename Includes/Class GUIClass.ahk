@@ -203,7 +203,7 @@
 				Row:=[]
 				for c,d in Info.Headers
 					Row.Push(b[d])
-				LV_Add(Info.Options,Row*)
+				LV_Add(Info.Options,Row*),this.StoredLV[Info.Control].Push(b)
 		}}if(Info.AutoHDR){
 			if(Info.AutoHDR=1)
 				Loop,% LV_GetCount("Columns")
