@@ -17,7 +17,7 @@
 		Gui,%Win%:Font,% "s" Info.Size " c" Info.Color,Courier New
 		if(Info.Background!="")
 			Gui,%Win%:Color,% Info.Background,% Info.Background
-		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color,this.SC:=[],this.Headers:=[]
+		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color,this.SC:=[],this.Headers:=[],this.FN:=A_ScriptDir "\Settings.ini"
 		for a,b in {Border:A_OSVersion~="^10"?3:0,Caption:DllCall("GetSystemMetrics",Int,4,Int)}
 			this[a]:=b
 		Gui,%Win%:+LabelGUIClass.
@@ -152,13 +152,10 @@
 		for a,b in Keys
 			Hotkey,%a%,%b%,On
 	}LoadPos(){
-		IniRead,Pos,Settings.ini,% this.Win,Text,0
-		IniRead,Max,Settings.ini,% this.Win,Max,0
+		IniRead,Pos,% this.FN,% this.Win,Text,0
+		IniRead,Max,% this.FN,% this.Win,Max,0
 		return {Pos:(Pos?Pos:""),Max:Max}
 	}ResetHeaders(Info){
-		/*
-			m("Reset Headers",Info.Control)
-		*/
 		this.Headers[Info.Control]:=[]
 		while(LV_GetCount("Columns"))
 			LV_DeleteCol(1)
@@ -167,10 +164,12 @@
 	}SavePos(){
 		Pos:=this.WinPos()
 		if(Pos.Max=0){
-			IniWrite,% Pos.Text,%A_ScriptDir%\Settings.ini,% this.Win,Text
-			IniDelete,Settings.ini,% this.Win,Max
+			IniWrite,% Pos.Text,% this.FN,% this.Win,Text
+			IniRead,Max,% this.FN,% this.Win,Max,0
+			if(Max)
+				IniDelete,% this.FN,% this.Win,Max
 		}else if(Pos.Max=1)
-			IniWrite,1,Settings.ini,% this.Win,Max
+			IniWrite,1,% this.FN,% this.Win,Max
 	}SetLV(Info){
 		if(!Info.Control)
 			return
@@ -214,12 +213,9 @@
 		}
 	}SetText(Control,Text:=""){
 		this.Default(Control)
-		if((sc:=this.Var[Control].sc).sc){
+		if((sc:=this.Var[Control].sc).sc)
 			sc.2181(0,Text)
-			/*
-				Len:=VarSetCapacity(tt,StrPut(Text,"UTF-8")-1),StrPut(Text,&tt,Len,"UTF-8"),sc.2181(0,&tt)
-			*/
-		}else
+		else
 			GuiControl,% this.Win ":",% this.Lookup[Control].HWND,%Text%
 	}SetTV(Info){
 		this.Default(Info.Control),(Info.Clear)?TV_Delete():"",(Info.Delete)?TV_Delete(Info.Delete):"",(Info.Text)?(TV:=TV_Add(Info.Text,(Info.Parent=1?TV_GetSelection():Info.Parent),Info.Options)):"",(Info.Text&&Info.Options&&Info.TV)?TV_Modify(Info.TV,Info.Options,Info.Text):""
