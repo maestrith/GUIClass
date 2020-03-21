@@ -48,13 +48,13 @@ MakeWin(MainWin){
 			 ,"Slider,gReport vMySlider AltSubmit,,xy"
 			 ,"StatusBar")
 	FixIE(Ver)
-	;~ MainWin.Full("MyTreeView")	;Add if you want the full tree reported rather than just Selected and/or Checked
+	;~ MainWin.Full("MyTreeView")		;Add if you want the full tree reported rather than just Selected and/or Checked
 	MainWin.Show("My Window")		;Show the Window with the Title of "My Window"
 	MainWin.Focus("MyEdit2")			;Set the Focus to "MyEdit2"
-	MainWin.SetLV({Control:"MyListView1",AutoHDR:[1],Data:[["Row 1","Text"],["Row 2 A Slightly wider row","More Text"]]})	;Add 2 Rows into the Left ListView
-	MainWin.SetLV({Control:"MyListView2",Data:[["Text","Here"]]})	;Add 2 Rows into the Left ListView
-	MainWin.SetText("MyEdit1","This is MyEdit1")																;Change the Text of "MyEdit1"
-	MainWin.SetText("MyStatic1","Press F1, F2, F3, F4, Drop Files, Select Items or resize the window to make something happen")	;Change the Text of "MyStatic1"
+	MainWin.SetLV({Control:"MyListView1",AutoHDR:[1],Headers:"Col1,Col2",Data:[["Row 1","Text"],["Row 2 A Slightly wider row","More Text"]]})	;Add 2 Rows into the Left ListView
+	MainWin.SetLV({Control:"MyListView2",Headers:["Col1","Col2"],Data:[{Col2:"Here",Col1:"Text"}],AutoHDR:1})											;Add 2 Rows into the Left ListView
+	MainWin.SetText("MyEdit1","This is MyEdit1")																					;Change the Text of "MyEdit1"
+	MainWin.SetText("MyStatic1","Press F1, F2, F3, F4, Drop Files, Select Items or resize the window to make something happen")					;Change the Text of "MyStatic1"
 	TVKeep[MainWin.Win].Push(MainWin.SetTV({Text:DefaultTVText,Options:"Select Vis Focus"}))
 	wb:=MainWin.ActiveX.wb
 	wb.Navigate("about:" (MainWin.Background=0?"<Body Style='Background-Color:black;Color:Grey'>":"") "IE Window")

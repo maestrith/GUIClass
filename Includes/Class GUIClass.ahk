@@ -17,7 +17,7 @@
 		Gui,%Win%:Font,% "s" Info.Size " c" Info.Color,Courier New
 		if(Info.Background!="")
 			Gui,%Win%:Color,% Info.Background,% Info.Background
-		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color,this.SC:=[]
+		this.All:=[],this.GUI:=[],this.HWND:=HWND,this.Con:=[],this.ID:="ahk_id" HWND,this.Win:=Win,GUIClass.Table[Win]:=this,this.Var:=[],this.LookUp:=[],this.ActiveX:=[],this.StoredLV:=[],this.Background:=Info.Background,this.Color:=Info.Color,this.SC:=[],this.Headers:=[]
 		for a,b in {Border:A_OSVersion~="^10"?3:0,Caption:DllCall("GetSystemMetrics",Int,4,Int)}
 			this[a]:=b
 		Gui,%Win%:+LabelGUIClass.
@@ -156,6 +156,45 @@
 			IniDelete,Settings.ini,% this.Win,Max
 		}else if(Pos.Max=1)
 			IniWrite,1,Settings.ini,% this.Win,Max
+	}SetLV(Info){
+		if(!Info.Control)
+			return
+		this.Default(Info.Control)
+		if(Info.Headers){
+			for a,b in (Info.Headers:=(IsObject(Info.Headers)?Info.Headers:StrSplit(Info.Headers,","))){
+				if(!this.Headers[Info.Control,b]){
+					m("here!")
+					while(LV_GetCount("Columns"))
+						LV_DeleteCol(1)
+					for a,b in Info.Headers
+						LV_InsertCol(a,"",b),this.Headers[Info.Control,b]:=1
+					Break
+				}
+			}
+		}if(Info.Clear)
+			LV_Delete(),this.StoredLV[Info.Control]:=[]
+		if(!this.StoredLV[Info.Control])
+			this.StoredLV[Info.Control]:=[]
+		if(Info.Data.1.HasKey(1)){
+			for a,b in Info.Data
+				LV_Add(Info.Options,b*),this.StoredLV[Info.Control].Push(b)
+		}else{
+			for a,b in Info.Data{
+				Row:=[]
+				for c,d in Info.Headers{
+					Row.Push(b[d])
+				}
+				LV_Add(Info.Options,Row*)
+			}
+		}
+		if(Info.AutoHDR){
+			if(Info.AutoHDR=1)
+				Loop,% LV_GetCount("Columns")
+					LV_ModifyCol(A_Index,"AutoHDR")
+			else
+				for a,b in Info.AutoHDR
+					LV_ModifyCol(b,"AutoHDR")
+		}
 	}SetText(Control,Text:=""){
 		this.Default(Control)
 		if((sc:=this.Var[Control].sc).sc){
@@ -165,31 +204,6 @@
 			*/
 		}else
 			GuiControl,% this.Win ":",% this.Lookup[Control].HWND,%Text%
-	}SetLV(Info){
-		this.Default(Info.Control)
-		if(Info.Headers){
-			Loop,% LV_GetCount("Columns"){
-				LV_GetText(Text,0,A_Index)
-				if(Text!=Info.Headers[A_Index]){
-					LV_Delete(),this.StoredLV[Info.Control]:=[]
-					while(LV_GetCount("Columns"))
-						LV_DeleteCol(1)
-					for a,b in Info.Headers
-						LV_InsertCol(A_Index,"",b)
-		}}}if(Info.Clear)
-			LV_Delete(),this.StoredLV[Info.Control]:=[]
-		if(!this.StoredLV[Info.Control])
-			this.StoredLV[Info.Control]:=[]
-		for a,b in Info.Data
-			LV_Add(Info.Options,b*),this.StoredLV[Info.Control].Push(b)
-		if(Info.AutoHDR){
-			if(Info.AutoHDR=1)
-				Loop,% LV_GetCount("Columns")
-					LV_ModifyCol(A_Index,"AutoHDR")
-			else
-				for a,b in Info.AutoHDR
-					LV_ModifyCol(b,"AutoHDR")
-		}
 	}SetTV(Info){
 		this.Default(Info.Control),(Info.Clear)?TV_Delete():"",(Info.Delete)?TV_Delete(Info.Delete):"",(Info.Text)?(TV:=TV_Add(Info.Text,(Info.Parent=1?TV_GetSelection():Info.Parent),Info.Options)):"",(Info.Text&&Info.Options&&Info.TV)?TV_Modify(Info.TV,Info.Options,Info.Text):""
 		return TV

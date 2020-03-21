@@ -1,4 +1,4 @@
-0.000.2
-Added:
--Hotkeys Method: Send a Key:Value pair for the Hotkey:Function
--DisableAll and Distroy: Added to Close()
+0.000.3
+Changed:
+-SetLV(): Headers can be either an Array or Comma Separated List
+-         Data can be either an Array[] or Object{} (Headers must match the data)
