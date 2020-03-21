@@ -91,19 +91,25 @@
 		Obj:=this.LookUp[Control]
 		if(Obj.Type~="TreeView|ListView")
 			Gui,% this.Win ":" Obj.Type,% Obj.HWND
-	}DisableAll(){
-		for a,b in this.All{
+	}Disable(Control){
+		Obj:=this.All[Control]
+		if(Obj.Label)
+			GuiControl,1:+g,% Obj.HWND
+		GuiControl,1:-Redraw,% Obj.HWND
+	}DisableAll(Redraw:=1,Control:=""){
+		for a,b in (Control?[this.All[Control]]:this.All){
 			if(b.Label)
-				GuiControl,1:+g,% b.HWND
-			GuiControl,1:-Redraw,% b.HWND
-		}
-	}DropFiles(Info*){
+				GuiControl,% this.Win ":+g",% b.HWND
+			if(Redraw)
+				GuiControl,% this.Win ":-Redraw",% b.HWND
+	}}DropFiles(Info*){
 		this:=GUIClass.Table[A_Gui],Info.2:=this.GetName(Info.2),(Fun:=Func("DropFiles"))?Fun.Call(Info*)
-	}EnableAll(){
-		for a,b in this.All{
+	}EnableAll(Redraw:=1,Control:=""){
+		for a,b in (Control?[this.All[Control]]:this.All){
 			if(b.Label)
 				GuiControl,% this.Win ":+g" b.Label,% b.HWND
-			GuiControl,% this.Win ":+Redraw",% b.HWND
+			if(Redraw)
+				GuiControl,% this.Win ":+Redraw",% b.HWND
 	}}Escape(){
 		KeyWait,Escape,U
 		this:=GUIClass.Table[A_Gui],(Func:=Func("SavePos"))?Func.Call(this.Win,this.WinPos()):this.SavePos(),(Esc:=Func(A_Gui "Escape"))?Esc.Call()
@@ -162,8 +168,7 @@
 		this.Default(Info.Control)
 		if(Info.Headers){
 			for a,b in (Info.Headers:=(IsObject(Info.Headers)?Info.Headers:StrSplit(Info.Headers,","))){
-				if(!this.Headers[Info.Control,b]){
-					m("here!")
+				if(!this.Headers[Info.Control,b]||this.Headers[Info.Control].Count()!=Info.Headers.Count()){
 					while(LV_GetCount("Columns"))
 						LV_DeleteCol(1)
 					for a,b in Info.Headers
@@ -171,6 +176,12 @@
 					Break
 				}
 			}
+		}
+		this.Default(Info.Control)
+		if(!Info.Data.Count()){
+			while(LV_GetCount("Columns"))
+				LV_DeleteCol(1)
+			return LV_Delete(),this.Headers[Info.Control]:=[]
 		}if(Info.Clear)
 			LV_Delete(),this.StoredLV[Info.Control]:=[]
 		if(!this.StoredLV[Info.Control])
@@ -181,13 +192,10 @@
 		}else{
 			for a,b in Info.Data{
 				Row:=[]
-				for c,d in Info.Headers{
+				for c,d in Info.Headers
 					Row.Push(b[d])
-				}
 				LV_Add(Info.Options,Row*)
-			}
-		}
-		if(Info.AutoHDR){
+		}}if(Info.AutoHDR){
 			if(Info.AutoHDR=1)
 				Loop,% LV_GetCount("Columns")
 					LV_ModifyCol(A_Index,"AutoHDR")
