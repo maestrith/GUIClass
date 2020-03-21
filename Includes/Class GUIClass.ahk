@@ -155,6 +155,15 @@
 		IniRead,Pos,Settings.ini,% this.Win,Text,0
 		IniRead,Max,Settings.ini,% this.Win,Max,0
 		return {Pos:(Pos?Pos:""),Max:Max}
+	}ResetHeaders(Info){
+		/*
+			m("Reset Headers",Info.Control)
+		*/
+		this.Headers[Info.Control]:=[]
+		while(LV_GetCount("Columns"))
+			LV_DeleteCol(1)
+		for a,b in Info.Headers
+			LV_InsertCol(a,"",b),this.Headers[Info.Control,b]:=1
 	}SavePos(){
 		Pos:=this.WinPos()
 		if(Pos.Max=0){
@@ -167,12 +176,12 @@
 			return
 		this.Default(Info.Control)
 		if(Info.Headers){
-			for a,b in (Info.Headers:=(IsObject(Info.Headers)?Info.Headers:StrSplit(Info.Headers,","))){
-				if(!this.Headers[Info.Control,b]||this.Headers[Info.Control].Count()!=Info.Headers.Count()){
-					while(LV_GetCount("Columns"))
-						LV_DeleteCol(1)
-					for a,b in Info.Headers
-						LV_InsertCol(a,"",b),this.Headers[Info.Control,b]:=1
+			Info.Headers:=(IsObject(Info.Headers)?Info.Headers:StrSplit(Info.Headers,","))
+			if(Info.Headers.Count()!=this.Headers[Info.Control].Count())
+				this.ResetHeaders(Info)
+			for a,b in Info.Headers{
+				if(!this.Headers[Info.Control,b]){
+					this.ResetHeaders(Info)
 					Break
 				}
 			}
