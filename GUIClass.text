@@ -1,5 +1,4 @@
-0.000.3
+0.000.4
 Changed:
--SetLV(): Headers can be either an Array or Comma Separated List
--         Data can be either an Array[] or Object{} (Headers must match the data)
--EnableAll() and DisableAll(): Added a way to single out a control and weather or not to Redraw.
+-SetLV(Control,Data,HeaderOrder,Options): Data is to be structured as an Array of Objects by [{"Header Name":"Data For Column"}]
+-When getting the information from a TreeView it will have a Selected attribute as well
