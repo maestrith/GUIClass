@@ -334,7 +334,7 @@ Class GUIClass{
 				VV:=Var.1,this.ActiveX[Name]:=%VV%
 			Name:=""
 	}}Close(a:=""){
-		this:=GUIClass.Table[A_Gui],(Func:=Func("SavePos"))?Func.Call(this.Win,this.WinPos()):this.SavePos(),(Func:=Func(A_Gui "Close"))?Func.Call():""
+		(this:=IsObject(this)?this:GUIClass.Table[A_Gui]),(Func:=Func("SavePos"))?Func.Call(this.Win,this.WinPos()):this.SavePos(),(Func:=Func(A_Gui "Close"))?Func.Call():""
 		Gui,% this.Win ":Destroy"
 		this.DisableAll()
 	}ContextMenu(x*){
@@ -371,6 +371,8 @@ Class GUIClass{
 	}}Escape(){
 		KeyWait,Escape,U
 		this:=GUIClass.Table[A_Gui],(Func:=Func("SavePos"))?Func.Call(this.Win,this.WinPos()):this.SavePos(),(Esc:=Func(A_Gui "Escape"))?Esc.Call()
+		if(IsLabel(Label:=A_Gui "Escape"))
+			SetTimer,%Label%,-1
 		return 
 	}Exit(){
 		Exit:
@@ -402,6 +404,14 @@ Class GUIClass{
 			for c,d in StrSplit(this.Con[HWND].Pos)
 				d~="w|h"?(obj[d]:=%d%-w%d%):d~="x|y"?(Obj[d]:=%d%-(d="y"?WH+this.Caption+this.Border:WW+this.Border))
 		}DetectHiddenWindows,%Detect%
+	}GetLV(Control){
+		this.Default(Control),Obj:=[]
+		while(Next:=LV_GetNext(Next)){
+			Obj.Push(OO:=[])
+			Loop,% LV_GetCount("Columns")
+				LV_GetText(Text,Next,A_Index),OO.Push(Text)
+		}
+		return Obj
 	}GetTV(Control){
 		this.Default(Control)
 		return TV_GetSelection()

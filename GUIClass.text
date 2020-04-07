@@ -2,3 +2,4 @@
 Changed:
 -SetLV(Control,Data,HeaderOrder,Options): Data is to be structured as an Array of Objects by [{"Header Name":"Data For Column"}]
 -When getting the information from a TreeView it will have a Selected attribute as well
+-Escape(): Now will work with Labels
